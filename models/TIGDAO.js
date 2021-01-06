@@ -93,7 +93,6 @@ exports.buyProduct = function (body,cb) {
                         cb("구매");
                     }
                 });
-                
             }
             else {
                 cb("구매 불가능");
