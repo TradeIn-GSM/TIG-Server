@@ -86,35 +86,38 @@ exports.buyProduct = function (body,cb) {
                 if(error){
                     console.log(error);
                 } else{
-                    if(!cellResults){
-                        console.log("물건이 없다")
+                    if(!cellResults[0]){
+                        cb("noproduct")
                     } else {
-                        var buyPossible = userResults[0].point - cellResults[0].point;
-                        if (buyPossible >= 0) {
-                            console.log("구매 가능");
-                            connection.query(`update user set point = ${buyPossible} where userid = '${body.userid}' ;`, function (error, fields) {//구매자 포인트 감소
-                                if (error) {
-                                    console.log(error);
-                                } else {
-                                    connection.query(`update user set point = ${buyPossible} where userid = '${cellResults[0].userid}' ;`, function (error, fields) {//판매자 포인트 증가
-                                        if(error){
-                                            console.log(error)
-                                        }else{                                        
-                                            connection.query(`delete from product where cell = '${body.cell}' ;`, function (error, fields) {
-                                                if(error){
-                                                    console.log(error)
-                                                }else{
-                                                    cb("구매");
-                                                }                        
-                                            });
-                                        }                        
-                                    });
-                                }
-                            });
-                        }
-                        else {
-                            cb("구매 불가능");
-                        }
+                        connection.query(`SELECT * FROM user where userid = '${cellResults[0].userid}';`, function (error, sellResults, fields) {
+                            console.log("구매 가능")
+                            var buyPossible = userResults[0].point - cellResults[0].price;
+                            if (buyPossible >= 0) {
+                                console.log("구매 가능");
+                                connection.query(`update user set point = ${buyPossible} where userid = '${body.userid}' ;`, function (error, fields) {//구매자 포인트 감소
+                                    if (error) {
+                                        console.log(error);
+                                    } else {
+                                        connection.query(`update user set point = ${parseInt(cellResults[0].price)+parseInt(sellResults[0].point)} where userid = '${cellResults[0].userid}' ;`, function (error, fields) {//판매자 포인트 증가
+                                            if(error){
+                                                console.log(error)
+                                            }else{
+                                                connection.query(`delete from product where cell = '${body.cell}' ;`, function (error, fields) {
+                                                    if(error){
+                                                        console.log(error)
+                                                    }else{
+                                                        cb("구매");
+                                                    }                        
+                                                });
+                                            }                        
+                                        });
+                                    }
+                                });
+                            }
+                            else {
+                                cb("구매 불가능");
+                            }
+                        });
                     }
                 }
             });
@@ -144,5 +147,5 @@ exports.sellProduct = function (body, cb) {
             })
         }
     });
-    
+
 }
