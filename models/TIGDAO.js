@@ -82,21 +82,21 @@ exports.buyProduct = function (body,cb) {
         if (error) {
             console.log(error);
         } else {
-            connection.query(`SELECT * FROM product where cell = '${body.cell}';`, function (error, cellResults, fields) {
+            connection.query(`SELECT * FROM product where cell = '${body.cell}';`, function (error, cellResults, fields) {//빈 공간인지 확인
                 if(error){
                     console.log(error);
                 } else{
                     if(!cellResults){
-                        console.log("물건이 들어있다")
+                        console.log("물건이 없다")
                     } else {
                         var buyPossible = userResults[0].point - cellResults[0].point;
                         if (buyPossible >= 0) {
                             console.log("구매 가능");
-                            connection.query(`update user set point = ${buyPossible} where userid = '${body.userid}' ;`, function (error, fields) {
+                            connection.query(`update user set point = ${buyPossible} where userid = '${body.userid}' ;`, function (error, fields) {//구매자 포인트 감소
                                 if (error) {
                                     console.log(error);
                                 } else {
-                                    connection.query(`update user set point = ${buyPossible} where userid = '${cellResults[0].userid}' ;`, function (error, fields) {
+                                    connection.query(`update user set point = ${buyPossible} where userid = '${cellResults[0].userid}' ;`, function (error, fields) {//판매자 포인트 증가
                                         if(error){
                                             console.log(error)
                                         }else{                                        
