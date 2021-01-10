@@ -31,7 +31,13 @@ router.post('/user/join', function (req, res, next) {
   });
 });
 
-router.post('/chargePoint', function (req, res, next) {
+router.post('/point/insert', function (req, res, next) {
+  model.insertMoney(req.body,(result)=>{
+    res.json(result);
+  });
+});
+
+router.post('/point/charge', function (req, res, next) {
   model.chargePoint(req.body,(result)=>{
     res.json(result);
   });

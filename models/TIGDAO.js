@@ -65,13 +65,21 @@ exports.insertMember = function (body,cb) {
     });
 }
 
-//돈 충전
+//돈 삽입
+exports.insertMoney = function (body,cb) {
+    money+=body.money;
+    console.log(money)
+    cb(`${money}원 충전`)
+}
+
+//돈 충전 완료
 exports.chargePoint = function (body,cb) {
-    connection.query(`update user set point = point+${body.chargePoint} where userid = '${body.userid}' ;`, function (error, fields) {
+    connection.query(`update user set point = point+${money} where userid = '${body.userid}' ;`, function (error, fields) {
         if (error) {
             console.log(error);
         } else {
-            cb(`${body.chargePoint}원을 ${body.userid}가 충전`);
+            cb(`${money}원을 ${body.userid}가 충전`);
+            money=0;
         }
     });
 }
