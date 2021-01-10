@@ -78,25 +78,46 @@ exports.chargePoint = function (body,cb) {
 
 //상품 구매
 exports.buyProduct = function (body,cb) {
-    connection.query(`SELECT * FROM user where userid = '${body.userid}';`, function (error, results, fields) {
+    connection.query(`SELECT * FROM user where userid = '${body.userid}';`, function (error, userResults, fields) {//구매자 확인
         if (error) {
             console.log(error);
         } else {
-            var buyPossible = results[0].point - body.cost;
-            console.log(results[0].point);
-            if (buyPossible >= 0) {
-                console.log("구매 가능");
-                connection.query(`update user set point = ${buyPossible} where userid = '${body.userid}' ;`, function (error, fields) {
-                    if (error) {
-                        console.log(error);
+            connection.query(`SELECT * FROM product where cell = '${body.cell}';`, function (error, cellResults, fields) {
+                if(error){
+                    console.log(error);
+                } else{
+                    if(!cellResults){
+                        console.log("물건이 들어있다")
                     } else {
-                        cb("구매");
+                        var buyPossible = userResults[0].point - cellResults[0].point;
+                        if (buyPossible >= 0) {
+                            console.log("구매 가능");
+                            connection.query(`update user set point = ${buyPossible} where userid = '${body.userid}' ;`, function (error, fields) {
+                                if (error) {
+                                    console.log(error);
+                                } else {
+                                    connection.query(`update user set point = ${buyPossible} where userid = '${cellResults[0].userid}' ;`, function (error, fields) {
+                                        if(error){
+                                            console.log(error)
+                                        }else{                                        
+                                            connection.query(`delete from product where cell = '${body.cell}' ;`, function (error, fields) {
+                                                if(error){
+                                                    console.log(error)
+                                                }else{
+                                                    cb("구매");
+                                                }                        
+                                            });
+                                        }                        
+                                    });
+                                }
+                            });
+                        }
+                        else {
+                            cb("구매 불가능");
+                        }
                     }
-                });
-            }
-            else {
-                cb("구매 불가능");
-            }
+                }
+            });
         }
     });
 }

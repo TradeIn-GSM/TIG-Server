@@ -38,7 +38,7 @@ router.post('/chargePoint', function (req, res, next) {
 });
 
 router.post('/Product/buy', function (req, res, next) {
-  model.buyProduct(req.body,(result)=>{
+  model.buyProduct(req.query,(result)=>{
     res.json(result);
   });
 });
