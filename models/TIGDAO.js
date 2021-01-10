@@ -14,7 +14,7 @@ exports.checkUser = function (cb) {
 
 //로그인
 exports.checkMember = function (body, cb) {
-    connection.query(`SELECT username, point FROM user where userid = '${body.userid}' AND userpassword = '${body.userpassword}';`, function (error, results, fields) {
+    connection.query(`SELECT username, point,userid FROM user where userid = '${body.userid}' AND userpassword = '${body.userpassword}';`, function (error, results, fields) {
         // console.log(results[0].name)
         if (error) {
             cb('nonemail')
@@ -97,6 +97,30 @@ exports.buyProduct = function (body,cb) {
             else {
                 cb("구매 불가능");
             }
+        }
+    });
+}
+
+//상품 등록
+exports.sellProduct = function (body, cb) {
+    connection.query(`SELECT * FROM product where idProduct ;`, function (error, results, fields) {
+        // console.log(results[0].name)
+        if (error) {
+            console.log(error);
+        } else {
+            console.log(results.length);
+            var postid = results.length;
+            postid++;
+            sql = 'INSERT INTO product (idProduct, cell, name, userid,price) VALUES(?, ?, ?, ?, ?)';
+            values = [postid, body.cell, body.name, body.userid, body.price];
+            console.log(values);
+            connection.query(sql, values, function (error, fields) {
+                if (error) {
+                    console.log(error);
+                } else {
+                    cb("판매");
+                }
+            })
         }
     });
 }

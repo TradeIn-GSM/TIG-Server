@@ -43,5 +43,10 @@ router.post('/Product/buy', function (req, res, next) {
   });
 });
 
+router.get('/product/sell', function (req, res, next) {
+  model.sellProduct(req.query,(result)=>{
+    res.json(result);
+  });
+});
 
 module.exports = router;
