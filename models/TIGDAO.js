@@ -87,7 +87,8 @@ exports.buyProduct = function (body,cb) {
                     console.log(error);
                 } else{
                     if(!cellResults[0]){
-                        cb("noproduct")
+                        var jsonstr = "{\"buyProduct\":\"no\"}";
+                        cb(JSON.parse(jsonstr))
                     } else {
                         connection.query(`SELECT * FROM user where userid = '${cellResults[0].userid}';`, function (error, sellResults, fields) {
                             console.log("구매 가능")
@@ -106,7 +107,8 @@ exports.buyProduct = function (body,cb) {
                                                     if(error){
                                                         console.log(error)
                                                     }else{
-                                                        cb("구매");
+                                                        var jsonstr = "{\"buyProduct\":\"yes\"}";
+                                                        cb(JSON.parse(jsonstr));
                                                     }                        
                                                 });
                                             }                        
