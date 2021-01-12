@@ -1,5 +1,5 @@
 var connection = require('./db')
-var money=0;
+var money=1000;
 var GPIO = require('onoff').Gpio;
 var Relay=[new GPIO(24, 'out'), new GPIO(25, 'out'), new GPIO(8, 'out'), new GPIO(7, 'out')];
 var Coin = new GPIO(4, 'in', 'falling', { debounceTimeout : 50 });
@@ -11,8 +11,8 @@ Coin.watch((err, value) => {
 });
 
 function openCell(cell){
-    Relay[cell].writeSync(0);
-    setTimeout(_ => Relay[cell].writeSync(1), 5000);
+    Relay[cell].write(1);
+    setTimeout(() => Relay[cell].write(0), 10000);
 }
 
 //유저 조회
@@ -81,8 +81,8 @@ exports.insertMember = function (body,cb) {
 }
 
 //현재 투입된 잔액 확인
-exports.getMoney = function (body,cb) {
-    cb(`${money}`)
+exports.getMoney = function (cb) {
+    cb(money)
 }
 
 //돈 충전 완료
@@ -128,7 +128,7 @@ exports.buyProduct = function (body,cb) {
                                                     if(error){
                                                         console.log(error)
                                                     }else{
-                                                        openCell(body.cell+1);
+                                                        openCell(parseInt(body.cell)+1);
                                                         var jsonstr = "{\"buyProduct\":\"yes\"}";
                                                         cb(JSON.parse(jsonstr));
                                                     }                        
@@ -166,7 +166,7 @@ exports.sellProduct = function (body, cb) {
                 if (error) {
                     console.log(error);
                 } else {
-                    openCell(body.cell+1);
+                    openCell(parseInt(body.cell)+1);
                     cb("판매");
                 }
             })

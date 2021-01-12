@@ -30,7 +30,7 @@ router.post('/user/join', function (req, res, next) {
   });
 });
 
-router.get('/point/get', function (res, next) {
+router.get('/point/get', function (req, res, next) {
   model.getMoney((result)=>{
     res.json(result);
   });
