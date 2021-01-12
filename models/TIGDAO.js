@@ -82,10 +82,7 @@ exports.insertMember = function (body,cb) {
 
 //현재 투입된 잔액 확인
 exports.getMoney = function (cb) {
-    var data = {
-        point : money
-    }
-    cb(JSON.parse(data))
+    cb(money)
 }
 
 //돈 충전 완료
