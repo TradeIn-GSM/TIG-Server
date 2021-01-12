@@ -82,7 +82,10 @@ exports.insertMember = function (body,cb) {
 
 //현재 투입된 잔액 확인
 exports.getMoney = function (body,cb) {
-    cb(`${money}`)
+    var data = {
+        point : money
+    }
+    cb(JSON.parse(data))
 }
 
 //돈 충전 완료
@@ -159,6 +162,11 @@ exports.sellProduct = function (body, cb) {
             console.log(results.length);
             var postid = results.length;
             postid++;
+            for(let i =0; i< results.length; i++){
+                if(results[i].cell == body.cell){
+                    cb(비어있지 않은 자리)
+                }
+            }
             sql = 'INSERT INTO product (idProduct, cell, name, userid,price) VALUES(?, ?, ?, ?, ?)';
             values = [postid, body.cell, body.name, body.userid, body.price];
             console.log(values);
