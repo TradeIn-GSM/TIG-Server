@@ -2,7 +2,6 @@ var express = require('express');
 var router = express.Router();
 var model = require('../models/TIGDAO');
 
-
 /* GET home page. */
 router.get('/user', function (req, res, next) {
   model.checkUser((result)=>{

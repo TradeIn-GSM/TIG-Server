@@ -1,10 +1,7 @@
 var connection = require('./db')
 var money=0;
 var GPIO = require('onoff').Gpio;
-var Relay1=24 = require('onoff').Gpio;
-var Relay2=25 = require('onoff').Gpio;
-var Relay3=8 = require('onoff').Gpio;
-var Relay4=7 = require('onoff').Gpio;
+var Relay=[new GPIO(24, 'out'), new GPIO(25, 'out'), new GPIO(8, 'out'), new GPIO(7, 'out')];
 var Coin = new GPIO(4, 'in', 'falling', { debounceTimeout : 50 });
 
 Coin.watch((err, value) => {
@@ -12,6 +9,11 @@ Coin.watch((err, value) => {
     money+=1000;
     console.log('투입된 금액:',money);
 });
+
+function openCell(cell){
+    Relay[cell].writeSync(0);
+    setTimeout(_ => Relay[cell].writeSync(1), 5000);
+}
 
 //유저 조회
 exports.checkUser = function (cb) {
@@ -126,6 +128,7 @@ exports.buyProduct = function (body,cb) {
                                                     if(error){
                                                         console.log(error)
                                                     }else{
+                                                        openCell(body.cell+1);
                                                         var jsonstr = "{\"buyProduct\":\"yes\"}";
                                                         cb(JSON.parse(jsonstr));
                                                     }                        
@@ -163,6 +166,7 @@ exports.sellProduct = function (body, cb) {
                 if (error) {
                     console.log(error);
                 } else {
+                    openCell(body.cell+1);
                     cb("판매");
                 }
             })
