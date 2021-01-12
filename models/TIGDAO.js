@@ -78,11 +78,9 @@ exports.insertMember = function (body,cb) {
     });
 }
 
-//돈 삽입
-exports.insertMoney = function (body,cb) {
-    money+=body.money;
-    console.log(money)
-    cb(`${money}원 충전`)
+//현재 투입된 잔액 확인
+exports.getMoney = function (body,cb) {
+    cb(`${money}`)
 }
 
 //돈 충전 완료

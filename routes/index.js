@@ -31,8 +31,8 @@ router.post('/user/join', function (req, res, next) {
   });
 });
 
-router.post('/point/insert', function (req, res, next) {
-  model.insertMoney(req.body,(result)=>{
+router.post('/point/get', function (req, res, next) {
+  model.getMoney(req.body,(result)=>{
     res.json(result);
   });
 });
