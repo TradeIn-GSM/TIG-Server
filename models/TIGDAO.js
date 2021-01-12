@@ -1,4 +1,17 @@
 var connection = require('./db')
+var money=0;
+var GPIO = require('onoff').Gpio;
+var Relay1=24 = require('onoff').Gpio;
+var Relay2=25 = require('onoff').Gpio;
+var Relay3=8 = require('onoff').Gpio;
+var Relay4=7 = require('onoff').Gpio;
+var Coin = new GPIO(4, 'in', 'falling', { debounceTimeout : 50 });
+
+Coin.watch((err, value) => {
+    if (err) throw err;
+    money+=1000;
+    console.log('투입된 금액:',money);
+});
 
 //유저 조회
 exports.checkUser = function (cb) {
