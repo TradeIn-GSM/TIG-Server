@@ -1,0 +1,1 @@
+(trap 'kill 0' SIGINT; raspi-gpio get 4 & lt -p 3000 -s tig-server & npm start & mjpg_streamer -i "input_uvc.so -d /dev/video0" -o "output_http.so -p 8000 -w /usr/local/share/mjpg-streamer/www/")

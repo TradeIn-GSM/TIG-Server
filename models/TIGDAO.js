@@ -1,8 +1,8 @@
 var connection = require('./db')
-var money=1000;
+var money=0;
 var GPIO = require('onoff').Gpio;
 var Relay=[new GPIO(24, 'out'), new GPIO(25, 'out'), new GPIO(8, 'out'), new GPIO(7, 'out')];
-var Coin = new GPIO(4, 'in', 'falling', { debounceTimeout : 50 });
+var Coin = new GPIO(4, 'in', 'falling', { debounceTimeout : 40 });
 
 Coin.watch((err, value) => {
     if (err) throw err;
